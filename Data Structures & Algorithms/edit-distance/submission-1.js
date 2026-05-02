@@ -1,0 +1,34 @@
+class Solution {
+    /**
+     * @param {string} word1
+     * @param {string} word2
+     * @return {number}
+     */
+    minDistance(word1, word2) {
+        const m = word1.length, n = word2.length;
+
+        const dp = Array.from({length: m+1}, () => new Array(n+1).fill(0));
+
+        // fill 1st row - default
+        for(let i=0; i<=m; i++) dp[i][0] = i;
+
+        // fill 1st col - defauly
+        for(let j=0; j<=n; j++) dp[0][j] = j;
+
+        for(let i=1; i<=m; i++){
+            for(let j=1; j<=n; j++){
+                if(word1[i-1] == word2[j-1]){
+                    dp[i][j] = dp[i-1][j-1];
+                }else{
+                    dp[i][j] = 1 + Math.min(
+                                        dp[i-1][j], // insert
+                                        dp[i-1][j-1], // replace
+                                        dp[i][j-1] // delete
+                                    )
+                }
+            }
+        }
+
+        return dp[m][n]
+    }
+}
